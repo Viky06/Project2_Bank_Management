@@ -1,0 +1,144 @@
+Solution
+Below is a Java implementation based on the requirements you provided. This code demonstrates the use of Object-Oriented Programming (OOP) concepts such as classes, inheritance, encapsulation, and polymorphism.
+
+import java.util.Scanner;
+
+class Customer {
+    // Personal Details
+    private String name;
+    private String dob;
+
+    public Customer(String name, String dob) {
+        this.name = name;
+        this.dob = dob;
+    }
+
+    // Getters and Setters
+    // ...
+
+    // Additional functions
+    // ...
+}
+
+class Account {
+    // Account Details
+    private int accountNumber;
+    private String accountType;
+    private double balance;
+
+    public Account(int accountNumber, String accountType, double balance) {
+        this.accountNumber = accountNumber;
+        this.accountType = accountType;
+        this.balance = balance;
+    }
+
+    // Getters and Setters
+    // ...
+
+    // Additional functions
+    // ...
+}
+
+class RBI {
+    private Customer customer;
+    private Account account;
+
+    public RBI(Customer customer, Account account) {
+        this.customer = customer;
+        this.account = account;
+    }
+
+    public double getInterestRate() {
+        return 0; // Base class, no specific interest rate
+    }
+
+    public double getWithdrawalLimit() {
+        return 0; // Base class, no specific withdrawal limit
+    }
+
+    public double calculateSimpleInterest(double principal, double rate, int time) {
+        return principal * (1 + rate * time);
+    }
+
+    public double calculateCompoundInterest(double principal, double rate, int time, int n) {
+        return principal * Math.pow((1 + rate / n), n * time);
+    }
+}
+
+class SBI extends RBI {
+    public SBI(Customer customer, Account account) {
+        super(customer, account);
+    }
+
+    @Override
+    public double getInterestRate() {
+        return 0.05; // 5% annual interest rate for SBI
+    }
+}
+
+class ICICI extends RBI {
+    public ICICI(Customer customer, Account account) {
+        super(customer, account);
+    }
+
+    @Override
+    public double getInterestRate() {
+        return 0.05; // 5% annual interest rate for ICICI
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Want to open an account? (yes/No)");
+        String response = scanner.nextLine();
+
+        if (response.equalsIgnoreCase("yes")) {
+            System.out.println("Insert name:");
+            String name = scanner.nextLine();
+            System.out.println("Insert date of birth:");
+            String dob = scanner.nextLine();
+            Customer customer = new Customer(name, dob);
+
+            System.out.println("Insert account type (Saving/Current):");
+            String accountType = scanner.nextLine();
+            int accountNumber = 123; // You can generate a unique account number here
+            double initialBalance = (accountType.equalsIgnoreCase("Saving")) ? 2000 : 5000;
+            Account account = new Account(accountNumber, accountType, initialBalance);
+
+            System.out.println("In which bank you want to open the account? (SBI/ICICI)");
+            String bankName = scanner.nextLine();
+
+            RBI bank;
+            if (bankName.equalsIgnoreCase("SBI")) {
+                bank = new SBI(customer, account);
+            } else if (bankName.equalsIgnoreCase("ICICI")) {
+                bank = new ICICI(customer, account);
+            } else {
+                System.out.println("Invalid bank name.");
+                return;
+            }
+
+            System.out.println("Account has been opened and account no is: " + accountNumber);
+            System.out.println("Want to calculate interest? (yes/No)");
+            response = scanner.nextLine();
+
+            if (response.equalsIgnoreCase("yes")) {
+                System.out.println("Enter number of years:");
+                int years = scanner.nextInt();
+
+                double principal = account.getBalance();
+                double rate = bank.getInterestRate();
+                double simpleInterest = bank.calculateSimpleInterest(principal, rate, years);
+                double compoundInterest = bank.calculateCompoundInterest(principal, rate, years, 2);
+
+                System.out.println("Simple Interest: " + simpleInterest);
+                System.out.println("Compound Interest: " + compoundInterest);
+            }
+        } else {
+            System.out.println("Thank you for visiting. Have a great day!");
+        }
+    }
+}
+
+
